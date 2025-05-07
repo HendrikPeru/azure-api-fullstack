@@ -11,7 +11,7 @@ CORS(app, resources={r"/raamatud/*": {"origins": "*"}, r"/raamatu_otsing/*": {"o
 
 blob_connection_string = os.getenv('APPSETTING_AzureWebJobsStorage')
 blob_service_client = BlobServiceClient.from_connection_string(blob_connection_string)
-blob_container_name = os.getenv('APPSETTING_blob_container_name', 'raamatud')
+blob_container_name = os.getenv('APPSETTING_blob_container_name')
 
 def blob_konteineri_loomine(nimi):
     container_client = blob_service_client.get_container_client(container=nimi)
@@ -79,4 +79,4 @@ def raamatu_lisamine():
     return jsonify({"error": "Raamatut ei leitud Gutenbergis"}), 404
 
 if __name__ == '__main__':
-    app.run(debug=True, port=80)
+    app.run(debug=True, port=5000)
