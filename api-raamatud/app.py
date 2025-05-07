@@ -9,8 +9,8 @@ app = Flask(__name__)
 CORS(app, resources={r"/raamatud/*": {"origins": "*"}, r"/raamatu_otsing/*": {"origins": "*"}})
 
 
-blob_connection_string = os.getenv('AzureWebJobsStorage')
-blob_container_name = os.getenv('blob_container_name')
+blob_connection_string = os.getenv('APPSETTING_AzureWebJobsStorage')
+blob_container_name = os.getenv('APPSETTING_blob_container_name')
 
 if not blob_connection_string or not blob_container_name:
     raise RuntimeError("Puudub AzureWebJobsStorage või blob_container_name App Setting")
