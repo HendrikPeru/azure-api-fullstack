@@ -9,8 +9,15 @@ app = Flask(__name__)
 CORS(app, resources={r"/raamatud/*": {"origins": "*"}, r"/raamatu_otsing/*": {"origins": "*"}})
 
 
-blob_connection_string = os.getenv('APPSETTING_AzureWebJobsStorage')
-blob_container_name   = os.getenv('APPSETTING_blob_container_name')
+blob_connection_string = (
+    os.getenv("AzureWebJobsStorage")
+    or os.getenv("APPSETTING_AzureWebJobsStorage")
+)
+
+blob_container_name = (
+    os.getenv("blob_container_name", "peru")
+    or os.getenv("APPSETTING_blob_container_name", "peru")
+)
 
 def blob_konteineri_loomine(nimi):
     container_client = blob_service_client.get_container_client(container=nimi)
