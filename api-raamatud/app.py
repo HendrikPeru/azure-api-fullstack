@@ -9,9 +9,8 @@ app = Flask(__name__)
 CORS(app, resources={r"/raamatud/*": {"origins": "*"}, r"/raamatu_otsing/*": {"origins": "*"}})
 
 
-blob_connection_string = os.getenv('AZURE_BLOB_CONNECTION_STRING')
-blob_service_client = BlobServiceClient.from_connection_string(blob_connection_string)
-blob_container_name = "peru"
+blob_connection_string = os.getenv('APPSETTING_AzureWebJobsStorage')
+blob_container_name   = os.getenv('APPSETTING_blob_container_name', 'peru')
 
 def blob_konteineri_loomine(nimi):
     container_client = blob_service_client.get_container_client(container=nimi)
@@ -79,4 +78,4 @@ def raamatu_lisamine():
     return jsonify({"error": "Raamatut ei leitud Gutenbergis"}), 404
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=80)
