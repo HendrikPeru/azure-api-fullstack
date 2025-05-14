@@ -12,6 +12,9 @@ CORS(app, resources={r"/raamatud/*": {"origins": "*"}, r"/raamatu_otsing/*": {"o
 blob_connection_string = os.getenv('APPSETTING_AzureWebJobsStorage')
 blob_service_client = BlobServiceClient.from_connection_string(blob_connection_string)
 blob_container_name = os.getenv('APPSETTING_blob_container_name')
+if not blob_connection_string or not blob_container_name:
+    raise RuntimeError("Keskkonnamuutujad AzureWebJobsStorage või blob_container_name puuduvad")
+
 print(blob_connection_string)
 print(blob_container_name)
 
