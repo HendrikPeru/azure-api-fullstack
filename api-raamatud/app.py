@@ -6,20 +6,26 @@ import requests
 from flask_cors import CORS
 import logging
 
-logging.basicConfig(level=logging.INFO)
-
 app = Flask(__name__)
 CORS(app, resources={r"/raamatud/*": {"origins": "*"}, r"/raamatu_otsing/*": {"origins": "*"}})
 
 
-blob_connection_string = os.getenv("AzureWebJobsStorage")
-blob_service_client = BlobServiceClient.from_connection_string(blob_connection_string)
-blob_container_name = os.getenv("blob_container_name")
-if not blob_connection_string or not blob_container_name:
-    raise RuntimeError("Keskkonnamuutujad AzureWebJobsStorage või blob_container_name puuduvad")
+logging.basicConfig(level=logging.INFO)
 
-app.logger.info(f"Connection string: {blob_connection_string}")
-app.logger.info(f"Container name: {blob_container_name}")
+# Debug-logi, et näha env-var’e
+app.logger.info("ENV VARS:")
+for key in ("AzureWebJobsStorage", "blob_container_name"):
+    app.logger.info(f"  {key} = {os.getenv(key)}")
+
+# Järgmised read:
+blob_connection_string = os.getenv("AzureWebJobsStorage")
+blob_container_name   = os.getenv("blob_container_name")
+if not blob_connection_string or not blob_container_name:
+    raise RuntimeError("Env vars AzureWebJobsStorage või blob_container_name puuduvad")
+
+
+
+blob_service_client = BlobServiceClient.from_connection_string(blob_connection_string)
 
 def blob_konteineri_loomine(nimi):
     container_client = blob_service_client.get_container_client(container=nimi)
